@@ -1,0 +1,42 @@
+#!/bin/bash
+
+BIN=/home/svampis/Daidai/bin
+
+if [ $# -lt 1 ]
+then
+	echo "daidai.sh: give a file"
+	exit 4
+fi
+filename=$1
+
+if ! [ -f $filename.dai ]
+then
+	echo "q" | $BIN/daidai -f=$filename.dai -c=$(wc -l $filename | cut -f1 -d ' ') 1 2 4 8 > /dev/null
+fi
+
+coproc DAIDAI { stdbuf -oL $BIN/daidai -f=$filename.dai ; }
+
+while :
+do
+	read -r flashcard_id <&"${DAIDAI[0]}"
+	head -n $(expr $flashcard_id + 1) < $filename | tail -n 1 | cut -f2 | tr -d '\n'
+	echo ": "
+	read -e input
+	clear
+	if [ "$input" = "q" ]
+	then
+		echo "q" >&"${DAIDAI[1]}"
+		echo "Goodbye"
+		break
+	elif [ "$input" = "y" ]
+	then
+		echo "Correct"
+		echo "y" >&"${DAIDAI[1]}"
+	else
+		echo "Incorrect"
+		echo "n" >&"${DAIDAI[1]}"
+		#jword $(head -n $(expr $flashcard_id + 1) < $filename | tail -n 1 | cut -f1)
+	fi
+	echo "Correct answer: $(head -n $(expr $flashcard_id + 1) < $filename | tail -n 1)"
+done
+

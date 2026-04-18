@@ -1,0 +1,45 @@
+[
+ {
+  "directory": "/home/svampis/Daidai",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-g",
+   "-I./include",
+   "-c",
+   "./src/queue.c",
+   "-o",
+   "./build/queue.o"
+  ],
+  "file": "./src/queue.c"
+ },
+ {
+  "directory": "/home/svampis/Daidai",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-g",
+   "-I./include",
+   "-c",
+   "./src/leitner.c",
+   "-o",
+   "./build/leitner.o"
+  ],
+  "file": "./src/leitner.c"
+ },
+ {
+  "directory": "/home/svampis/Daidai",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-g",
+   "-I./include",
+   "./src/daidai.c",
+   "./build/queue.o",
+   "./build/leitner.o",
+   "-o",
+   "./bin/daidai"
+  ],
+  "file": "./src/daidai.c"
+ }
+]
